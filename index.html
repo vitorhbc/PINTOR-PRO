@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
+<title>Pintor PRO Portugal 3.0</title>
+</head>
+<body>
+<header class="topbar"><div><strong>PINTOR PRO</strong><small>Portugal · 3.0</small></div><button id="newQuoteBtn" class="ghost">Novo orçamento</button></header>
+
+<main>
+<section class="hero">
+  <div><span>Estimativa atual</span><strong id="heroTotal">0,00 €</strong></div>
+  <div class="hero-meta"><span id="heroArea">Área de pintura: 0,00 m²</span><span id="heroLiters">Tinta: 0,00 L</span></div>
+</section>
+
+<nav class="tabs">
+<button data-tab="calc" class="active">Calculadora</button>
+<button data-tab="quote">Orçamento</button>
+<button data-tab="history">Histórico</button>
+<button data-tab="settings">Definições</button>
+</nav>
+
+<section id="tab-calc" class="tab active">
+<div class="card">
+<h2>Área da casa</h2>
+<p class="hint">Podes calcular por dimensões ou introduzir a área total da casa para obter uma estimativa automática da área de pintura.</p>
+<div class="mode-row">
+<label class="mode"><input type="radio" name="areaMode" value="dimensions" checked> <span>Dimensões</span></label>
+<label class="mode"><input type="radio" name="areaMode" value="house"> <span>Área total da casa</span></label>
+</div>
+
+<div id="dimensionsBox" class="grid">
+<label>Largura (m)<input id="width" type="number" min="0" step="0.01" value="10"></label>
+<label>Comprimento (m)<input id="length" type="number" min="0" step="0.01" value="10"></label>
+<label>Altura (m)<input id="height" type="number" min="0" step="0.01" value="2.7"></label>
+</div>
+
+<div id="houseBox" class="hidden">
+<div class="grid">
+<label>Área total da casa (m²)<input id="houseArea" type="number" min="0" step="0.1" value="100"></label>
+<label>Fator de paredes<input id="wallFactor" type="number" min="0" step="0.1" value="2.5"></label>
+</div>
+<p class="hint">O fator transforma a área de pavimento em área estimada de paredes. É editável porque varia conforme a planta da casa. Ex.: 2,5 × 100 m² = 250 m² de paredes.</p>
+</div>
+
+<div class="grid">
+<label>Portas (un.)<input id="doors" type="number" min="0" step="1" value="0"></label>
+<label>Janelas (un.)<input id="windows" type="number" min="0" step="1" value="0"></label>
+<label>Área extra (+/− m²)<input id="extraArea" type="number" step="0.1" value="0"></label>
+</div>
+<label class="check"><input id="ceiling" type="checkbox"> Incluir tetos</label>
+<div id="resultCard" class="result">
+<div><span>Área de paredes</span><strong id="wallAreaOut">0,00 m²</strong></div>
+<div><span>Descontos</span><strong id="deductionsOut">0,00 m²</strong></div>
+<div><span>Área de pintura</span><strong id="paintAreaOut">0,00 m²</strong></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Tinta</h2>
+<div class="grid">
+<label>Demãos<select id="coats"><option>1</option><option selected>2</option><option>3</option></select></label>
+<label>Rendimento (m²/L/demão)<input id="coverage" type="number" min="0.1" step="0.1" value="10"></label>
+<label>Margem/desperdício (%)<input id="waste" type="number" min="0" step="0.5" value="10"></label>
+<label>Preço da tinta (€/L)<input id="paintPrice" type="number" min="0" step="0.01" value="8"></label>
+</div>
+<div class="grid">
+<label>Balde 5 L (€)<input id="p5" type="number" min="0" step="0.01" value="42"></label>
+<label>Balde 10 L (€)<input id="p10" type="number" min="0" step="0.01" value="75"></label>
+<label>Balde 15 L (€)<input id="p15" type="number" min="0" step="0.01" value="105"></label>
+<label>Balde 20 L (€)<input id="p20" type="number" min="0" step="0.01" value="135"></label>
+</div>
+<div class="result"><div><span>Tinta necessária</span><strong id="litersOut">0,00 L</strong></div><div><span>Compra estimada</span><strong id="bucketsOut">—</strong></div><div><span>Custo da tinta</span><strong id="paintCostOut">0,00 €</strong></div></div>
+</div>
+
+<div class="card">
+<h2>Mão de obra e extras</h2>
+<div class="grid">
+<label>Mão de obra (€/m²)<input id="labor" type="number" min="0" step="0.01" value="8"></label>
+<label>Primário (€/m²)<input id="primer" type="number" min="0" step="0.01" value="0"></label>
+<label>Massa + lixagem (€/m²)<input id="filler" type="number" min="0" step="0.01" value="0"></label>
+<label>Deslocação (€)<input id="travel" type="number" min="0" step="0.01" value="0"></label>
+<label>Desconto (€)<input id="discount" type="number" min="0" step="0.01" value="0"></label>
+<label>IVA<select id="vat"><option value="0">0%</option><option value="0.06">6%</option><option value="0.23" selected>23%</option></select></label>
+</div>
+<div class="result total"><div><span>Total sem IVA</span><strong id="subtotalOut">0,00 €</strong></div><div><span>IVA</span><strong id="vatOut">0,00 €</strong></div><div><span>Total</span><strong id="totalOut">0,00 €</strong></div></div>
+</div>
+</section>
+
+<section id="tab-quote" class="tab">
+<div class="card">
+<h2>Dados do orçamento</h2>
+<div class="grid">
+<label>Cliente<input id="client" type="text"></label>
+<label>Telefone<input id="phone" type="tel"></label>
+<label>Morada da obra<input id="address" type="text"></label>
+<label>Descrição do trabalho<input id="job" type="text" value="Pintura interior"></label>
+<label>Validade (dias)<input id="validity" type="number" value="15"></label>
+</div>
+<label>Notas<textarea id="notes" rows="4"></textarea></label>
+</div>
+<div class="card">
+<h2>Resumo</h2>
+<div id="quotePreview" class="preview"></div>
+<div class="actions"><button id="saveBtn">Guardar orçamento</button><button id="shareBtn" class="secondary">Partilhar</button><button id="printBtn" class="secondary">Imprimir / PDF</button></div>
+</div>
+</section>
+
+<section id="tab-history" class="tab">
+<div class="card"><h2>Histórico</h2><div id="historyList"><p class="hint">Ainda não existem orçamentos guardados.</p></div></div>
+</section>
+
+<section id="tab-settings" class="tab">
+<div class="card">
+<h2>Dados do pintor / empresa</h2>
+<div class="grid">
+<label>Nome / Empresa<input id="company" type="text"></label>
+<label>NIF<input id="nif" type="text"></label>
+<label>Telefone<input id="companyPhone" type="tel"></label>
+<label>Email<input id="email" type="email"></label>
+<label>Morada<input id="companyAddress" type="text"></label>
+</div>
+<button id="settingsBtn">Guardar definições</button>
+<p class="hint">Os valores de cálculo são exemplos editáveis e devem ser ajustados aos teus preços e condições.</p>
+</div>
+</section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
